@@ -14,9 +14,4 @@
     <PackageReference Include="pomelo.entityframeworkcore.mysql" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Views\Shared\" />
-  </ItemGroup>
-
 </Project>
