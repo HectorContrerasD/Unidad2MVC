@@ -35,9 +35,21 @@ namespace Act1.Controllers
             };
             return View(viewModel);
         }
-        public IActionResult Detalles()
+        public IActionResult Detalles(string Id)
         {
-            return View();
+            AnimalesContext context = new();
+            var seleccionado = context.Especies.Include(x=>x.IdClaseNavigation).First(x=>x.Especie ==Id);
+            DetallesViewModel vm = new()
+            {
+                Id = seleccionado.Id,
+                Nombre = seleccionado.Especie,
+                Clase = seleccionado.IdClaseNavigation?.Nombre ?? "",
+                Peso = seleccionado.Peso,
+                Descripcion = seleccionado.Observaciones ?? "",
+                Tamano = seleccionado.Tamaño,
+                Habitat = seleccionado.Habitat ?? ""
+            };
+            return View(vm);
         }
     }
 }

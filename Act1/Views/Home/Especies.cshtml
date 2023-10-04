@@ -9,7 +9,7 @@
     <div class="listaEspecies2">
         @foreach (var item in Model.ListaAnimales)
         {
-            <a href="~/especies/detalles/@item.AnimalName">
+            <a href="~/Home/detalles/@item.AnimalName">
                 <img src="~/especies/@(item.AnimalId).jpg" title="@item.AnimalName" />
             </a>
         }
