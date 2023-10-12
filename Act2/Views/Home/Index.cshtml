@@ -1,5 +1,27 @@
-﻿
+﻿@model IEnumerable<Act2.Models.ViewModels.IndexViewModel>
 @{
-    Layout = "Layout0";
+    Layout = "Layout";
 }
-
+        <section class="nav">
+            <h3>ABC de Razas</h3>
+            <nav>
+                <a href="index.html">Todas</a>
+                <a href="index.html">A</a>
+                <a href="index.html">B</a>
+                <a href="index.html">C</a>
+                <a href="pais.html">Listado por país</a>
+            </nav>
+        </section>
+        <section class="list">
+            <ul>
+        @foreach(var item in Model)
+        {
+                    <li>
+                        <a href="raza.html">
+                            <img src="~/imgs_perros/@(item.Id)_0.jpg">
+                            @item.NombreRaza
+                        </a>
+                    </li>
+        }
+    </ul>
+        </section>

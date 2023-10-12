@@ -1,0 +1,8 @@
+﻿namespace Act2.Models.ViewModels
+{
+    public class IndexViewModel
+    {
+        public uint Id { get; set; }
+        public string NombreRaza { get; set; } = null!;
+    }
+}
