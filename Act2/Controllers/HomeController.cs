@@ -19,7 +19,7 @@ namespace Act2.Controllers
             {
                 Id = x.Id,
                 NombreRaza = x.Nombre
-            });
+            }).OrderBy(x=>x.NombreRaza);
             if (id != null)
             {
                 var datos = Razas.Where(x => x.NombreRaza.StartsWith(id));
