@@ -20,47 +20,48 @@ namespace Act2.Controllers
             return View(datos);
 
         }
-       
+
+        [Route("/Detalles/{nombrer}")]
         public IActionResult Detalles(string nombrer)
         {
             PerrosContext cont = new PerrosContext();
             nombrer = nombrer.Replace("-"," ");
             Random r = new Random();
-            var existe = cont.Razas.Where(x=>x.Nombre == nombrer).First();
-            if (existe == null)
+            var datos = cont.Razas.Include(x => x.IdPaisNavigation).Include(x => x.Caracteristicasfisicas)
+                .Include(x => x.Estadisticasraza).Where(r => r.Nombre == nombrer).FirstOrDefault();
+            var rnd = cont.Razas.Where(x => x.Nombre != nombrer).Select(x=> new RazasModel() {
+                Id = x.Id,
+                Name = x.Nombre
+            }).OrderBy(x=> r.Next()).ToList().Take(4);
+            if (datos == null)
                return RedirectToAction("Index");
 
-            var datos = cont.Razas.Include(x => x.IdPaisNavigation).Include(x => x.Caracteristicasfisicas)
-                .Include(x => x.Estadisticasraza).Where(r => r.Nombre == nombrer).Select(x => new DetallesViewModel
-                {
-                    Id = x.Id,
-                    AlturaMax = x.AlturaMax,
-                    AlturaMin = x.AlturaMin,
-                    AmistadDesconocidos = x.Estadisticasraza != null ? x.Estadisticasraza.AmistadDesconocidos : 0,
-                    AmistadPerros = x.Estadisticasraza != null ? x.Estadisticasraza.AmistadPerros:0,
-                    Cola = x.Caracteristicasfisicas != null? x.Caracteristicasfisicas.Cola:"",
-                    Color = x.Caracteristicasfisicas != null?x.Caracteristicasfisicas.Color:"",
-                    Descripcion = x.Descripcion,
-                    EjercicioObligatorio= x.Estadisticasraza !=null ?x.Estadisticasraza.EjercicioObligatorio:0,
-                    EsperanzaVida = x.EsperanzaVida,
-                    FacilidadEntrenamiento = x.Estadisticasraza != null?x.Estadisticasraza.FacilidadEntrenamiento:0,
-                    Hocico = x.Caracteristicasfisicas != null ? x.Caracteristicasfisicas.Hocico:"",
-                    NecesidadCepillado = x.Estadisticasraza != null ? x.Estadisticasraza.NecesidadCepillado : 0,
-                    NivelEnergia = x.Estadisticasraza != null ? x.Estadisticasraza.NivelEnergia : 0,
-                    Nombre = x.Nombre,
-                    OtrosNombres = x.OtrosNombres,
-                    PaisOrigen = x.IdPaisNavigation.Nombre??"",
-                    Patas = x.Caracteristicasfisicas!=null?x.Caracteristicasfisicas.Patas:"",
-                    Pelo = x.Caracteristicasfisicas!= null?x.Caracteristicasfisicas.Pelo:"",
-                    PesoMax = x.PesoMax,
-                    PesoMin = x.PesoMin,
-                    ListaRazasR = cont.Razas.Where(x=>x.Nombre != nombrer).Select(x=> new RazasModel
-                    {
-                        Id = x.Id,
-                        Name = x.Nombre
-                    }).OrderBy(x=> r.Next()).Take(4)
-                }); 
-            return View(datos);
+            DetallesViewModel vm = new()
+            {
+                Id = datos.Id,
+                AlturaMax = datos.AlturaMax,
+                AlturaMin = datos.AlturaMin,
+                AmistadDesconocidos = datos.Estadisticasraza != null ? datos.Estadisticasraza.AmistadDesconocidos : 0,
+                AmistadPerros = datos.Estadisticasraza != null ? datos.Estadisticasraza.AmistadPerros : 0,
+                Cola = datos.Caracteristicasfisicas != null ? datos.Caracteristicasfisicas.Cola : "",
+                Color = datos.Caracteristicasfisicas != null ? datos.Caracteristicasfisicas.Color : "",
+                Descripcion = datos.Descripcion,
+                EjercicioObligatorio = datos.Estadisticasraza != null ? datos.Estadisticasraza.EjercicioObligatorio : 0,
+                EsperanzaVida = datos.EsperanzaVida,
+                FacilidadEntrenamiento = datos.Estadisticasraza != null ? datos.Estadisticasraza.FacilidadEntrenamiento : 0,
+                Hocico = datos.Caracteristicasfisicas != null ? datos.Caracteristicasfisicas.Hocico : "",
+                NecesidadCepillado = datos.Estadisticasraza != null ? datos.Estadisticasraza.NecesidadCepillado : 0,
+                NivelEnergia = datos.Estadisticasraza != null ? datos.Estadisticasraza.NivelEnergia : 0,
+                Nombre = datos.Nombre,
+                OtrosNombres = datos.OtrosNombres,
+                PaisOrigen = datos.IdPaisNavigation.Nombre ?? "",
+                Patas = datos.Caracteristicasfisicas != null ? datos.Caracteristicasfisicas.Patas : "",
+                Pelo = datos.Caracteristicasfisicas != null ? datos.Caracteristicasfisicas.Pelo : "",
+                PesoMax = datos.PesoMax,
+                PesoMin = datos.PesoMin,
+                ListaRazasR = rnd
+            };
+            return View(vm);
         }
         public IActionResult PorPais()
         {
