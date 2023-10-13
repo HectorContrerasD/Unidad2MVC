@@ -29,7 +29,7 @@ namespace Act2.Controllers
             Random r = new Random();
             var datos = cont.Razas.Include(x => x.IdPaisNavigation).Include(x => x.Caracteristicasfisicas)
                 .Include(x => x.Estadisticasraza).Where(r => r.Nombre == nombrer).FirstOrDefault();
-            var rnd = cont.Razas.Where(x => x.Nombre != nombrer).Select(x=> new RazasModel() {
+            var rnd = cont.Razas.Where(x => x.Nombre != nombrer).ToList().Select(x=> new RazasModel() {
                 Id = x.Id,
                 Name = x.Nombre
             }).OrderBy(x=> r.Next()).ToList().Take(4);
