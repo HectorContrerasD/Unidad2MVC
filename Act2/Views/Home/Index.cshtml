@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Act2.Models.ViewModels.IndexViewModel>
+﻿@model Act2.Models.ViewModels.IndexViewModel
 @{
     Layout = "Layout";
 }
@@ -6,15 +6,18 @@
             <h3>ABC de Razas</h3>
             <nav>
                 <a href="/Home/Index">Todas</a>
-                <a href="index.html">A</a>
-                <a href="index.html">B</a>
-                <a href="index.html">C</a>
+                @foreach (var item in Model.Letras)
+        {
+            
+                <a href="~/Home/Index/@item">@item</a>
+              
+        }
                 <a href="~/Home/PorPais">Listado por país</a>
             </nav>
         </section>
         <section class="list">
             <ul>
-        @foreach(var item in Model)
+        @foreach(var item in Model.listaPerroxletra)
         {
                     <li>
                         <a href="~/Detalles/@item.NombreRaza.Replace(" ","-")">

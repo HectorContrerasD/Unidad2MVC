@@ -9,17 +9,31 @@ namespace Act2.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
+            IndexViewModel viewModel = new();
             PerrosContext context= new PerrosContext();
-            var datos = context.Razas.Select(x => new IndexViewModel
+            var letras = context.Razas.Select(x => x.Nombre.Substring(0, 1)).Distinct().OrderBy(x=>x).ToList();
+            viewModel.Letras   = letras;
+            var Razas = context.Razas.Select(x => new RazasLetraModel
             {
                 Id = x.Id,
                 NombreRaza = x.Nombre
+            });
+            if (id != null)
+            {
+                var datos = Razas.Where(x => x.NombreRaza.StartsWith(id));
+                viewModel.listaPerroxletra= datos;
+            }
+            else
+                viewModel.listaPerroxletra= Razas;
+                
+               
 
-            }).OrderBy(x=>x.NombreRaza);
-            return View(datos);
-
+               
+            return View(viewModel);
+                
+          
         }
 
         [Route("/Detalles/{nombrer}")]
