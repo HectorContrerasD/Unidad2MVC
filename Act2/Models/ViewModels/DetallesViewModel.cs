@@ -25,7 +25,7 @@ namespace Act2.Models.ViewModels
         public string? Hocico { get; set; }
         public string? Pelo { get; set; }
         public string? Color { get; set; }
-        public IEnumerable<RazasModel> ListaRazasR { get; set;}
+        public IEnumerable<RazasModel> ListaRazasR { get; set;}= null!;
 
     }
     public class RazasModel

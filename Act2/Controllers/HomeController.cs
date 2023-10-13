@@ -1,4 +1,5 @@
-﻿using Act2.Models.Entities;
+﻿
+using Act2.Models.Entities;
 using Act2.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,7 +66,30 @@ namespace Act2.Controllers
         }
         public IActionResult PorPais()
         {
-            return View();
+
+            PerrosContext ctx = new();
+
+            var datos = ctx.Razas.OrderBy(x => x.IdPaisNavigation.Nombre).GroupBy(x => x.IdPaisNavigation.Nombre)
+                .Select(x => new RazaPorPaisViewModel
+                {
+                    NombreP = x.Key??"",
+                    ListaRazaxPais = x.Select(x=> new PerrosxPaisModel
+                    {
+                        Id= x.Id,
+                        Name= x.Nombre
+                    })
+                });
+            //var datos = ctx.Paises.OrderBy(x => x.Nombre).Select(x => new RazaPorPaisViewModel
+            //{
+            //    NombreP = x.Nombre ?? "",
+            //    ListaRazaxPais = ctx.Razas.OrderBy(x => x.Nombre).Select(x => new PerrosxPaisModel
+            //    {
+            //        Id = x.Id,
+            //        Name = x.Nombre
+            //    })
+            //});
+
+            return View(datos);
         }
       
     }
